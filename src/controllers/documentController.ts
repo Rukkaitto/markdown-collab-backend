@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Document } from "../models/document";
-import Controller from "../interfaces/Controller";
+import Controller from "../interfaces/controller";
 
 const DocumentController: Controller = {
     index : async (req: Request, res: Response) => {
@@ -39,8 +39,10 @@ const DocumentController: Controller = {
     destroy: async (req: Request, res:Response) => {
         const { id } = req.params;
 
-        await Document.findByIdAndDelete(id);
-        res.status(200).send();
+        Document.findByIdAndDelete(id, null, (err: any, doc: any) => {
+            if (err) return Error("Could not delete document.");
+            res.status(200).send(doc);
+        });
     }
 }
 
