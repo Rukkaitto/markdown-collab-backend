@@ -41,7 +41,7 @@ const DocumentController: Controller = {
 
         Document.findByIdAndDelete(id, null, (err: any, doc: any) => {
             if (err) return Error("Could not delete document.");
-            res.status(200).send(doc);
+            res.send(doc);
         });
     }
 }
