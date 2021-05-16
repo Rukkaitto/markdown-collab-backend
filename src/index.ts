@@ -3,7 +3,6 @@ import http from "http";
 import cors from "cors";
 import { db } from "./mongoose";
 import documentRoutes from "./routes/documentRoutes";
-import DocumentController from "./controllers/documentController";
 import { Document } from "./models/document";
 
 const PORT = 8080;
@@ -11,7 +10,7 @@ const app = express();
 const server = http.createServer(app);
 const io = require("socket.io")(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: "*",
         methods: ["GET", "POST"]
     }
 });
@@ -27,7 +26,7 @@ db.once("open", () => {
 
             document.content = content;
 
-            io.emit("contentUpdate", {id, content});
+            io.emit(id, {content});
             await document.save((err: any) => {
                 if (err) return Error("Could not update document.");
             });
