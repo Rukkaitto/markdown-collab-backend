@@ -1,11 +1,24 @@
-version: '3.1'
+version: '3.8'
 
 services:
+    api:
+        container_name: markdown-collab-api
+        build: .
+        ports:
+            - "8080:8080"
+        links: 
+            - mongo
+        volumes: 
+            - ./:/usr/src/api
+            - /usr/src/api/node_modules
     mongo:
         image: mongo
+        container_name: markdown-collab-mongo
         restart: always
         environment: 
             MONGO_INITDB_ROOT_USERNAME: root
             MONGO_INITDB_ROOT_PASSWORD: password
         ports: 
-            - 27017:27017
+            - "27017:27017"
+        volumes:
+            - ./data:/data/db
