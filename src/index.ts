@@ -1,13 +1,19 @@
 import express from "express";
-import http from "http";
+import http from "https";
 import cors from "cors";
 import { db } from "./mongoose";
 import documentRoutes from "./routes/documentRoutes";
 import { Document } from "./models/document";
+import { readFileSync } from "fs";
+import path from "path";
 
 const PORT = 8080;
 const app = express();
-const server = http.createServer(app);
+const server = http.createServer({
+    cert: readFileSync(path.join(__dirname, "../ssl/cert.pem"), 'utf-8'),
+    key: readFileSync(path.join(__dirname, "../ssl/privkey.pem"), 'utf-8'),
+}, app);
+
 const io = require("socket.io")(server, {
     cors: {
         origin: "*",
